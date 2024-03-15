@@ -5,8 +5,8 @@
   "type": "magento2-module",
   "require": {
     "magento/framework": "*",
-    "amasty/gdpr-cookie": "2.10.*",
-    "magepal/magento2-googletagmanager": "2.7.*"
+    "amasty/gdpr-cookie": "*",
+    "magepal/magento2-googletagmanager": "*"
   },
   "license": [
     "Proprietary"
