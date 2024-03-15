@@ -1,0 +1,101 @@
+<?php
+/**
+ * Copyright (c) 2024. Taurus. All rights reserved
+ * @author Alexander Tolochko
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+
+/** @var \MagePal\GoogleTagManager\Block\DataLayer $dataLayerBlock */
+$dataLayerBlock = $block->getLayout()->getBlock('magepal_gtm_datalayer');
+$dataLayerName = $dataLayerBlock->getDataLayerName();
+
+/** @var \Taurus\GoogleConsentMode\Helper\Data $helper */
+$helper = $this->helper(\Taurus\GoogleConsentMode\Helper\Data::class);
+?>
+<script type="text/javascript">
+    window.<?= /* @noEscape */ $dataLayerName ?> = window.<?= /* @noEscape */ $dataLayerName ?> || [];
+
+    function gtag() {
+        window.dataLayer.push(arguments);
+    }
+
+    const TaurusConsentMode = {
+        defaultConsentModes: {},
+        consentModeSettings: {},
+
+        init: function (defaultConsentModes, consentModeSettings) {
+            TaurusConsentMode.defaultConsentModes = defaultConsentModes;
+            TaurusConsentMode.consentModeSettings = consentModeSettings;
+
+            TaurusConsentMode.initDefaultConsentMode();
+            TaurusConsentMode.updateConsentMode();
+
+            document.addEventListener('DOMContentLoaded', function () {
+                document.body.addEventListener('amcookie_save', TaurusConsentMode.updateConsentMode);
+                document.body.addEventListener('amcookie_allow', TaurusConsentMode.updateConsentMode);
+            });
+        },
+
+        /**
+         * Push consent mode to dataLayer
+         */
+        gtag: function () {
+            window.dataLayer.push(arguments);
+        },
+
+        /**
+         * Push default consent modes to GTM
+         */
+        initDefaultConsentMode: function () {
+            TaurusConsentMode.gtag('consent', 'default', Object.assign({ wait_for_update: 500 }, TaurusConsentMode.defaultConsentModes));
+        },
+
+        /**
+         * Push updated consent mode if visitors selected cookie poliy in Amasty GDPR module
+         */
+        updateConsentMode() {
+            let allowedCookieGroups = TaurusConsentMode.getCookieValue('amcookie_allowed');
+
+            if (typeof allowedCookieGroups !== 'undefined') {
+                allowedCookieGroups = decodeURIComponent(allowedCookieGroups);
+
+                let allGroupsAllowed = (allowedCookieGroups === '0'),
+                    updatedConsentModes = Object.assign({}, TaurusConsentMode.defaultConsentModes);
+
+                allowedCookieGroups = allowedCookieGroups.split(',');
+
+                Object.keys(updatedConsentModes).forEach(function(key) {
+                    let relatedCookieGroupId = TaurusConsentMode.consentModeSettings[key].cookie_group_id;
+                    if (allGroupsAllowed || allowedCookieGroups.indexOf(relatedCookieGroupId.toString()) !== -1) {
+                        updatedConsentModes[key] = 'granted';
+                    } else {
+                        updatedConsentModes[key] = 'denied';
+                    }
+                });
+
+                TaurusConsentMode.gtag('consent', 'update', updatedConsentModes);
+            }
+        },
+
+        /**
+         * Retrieve cookie value by name
+         *
+         * @param name
+         * @returns {*}
+         */
+        getCookieValue(name) {
+            let cookie = {};
+            document.cookie.split(';').forEach(function(el) {
+                let [key,value] = el.split('=');
+                cookie[key.trim()] = value;
+            })
+            return cookie[name];
+        }
+    };
+
+    TaurusConsentMode.init(
+        <?= json_encode($helper->getDefaultConsentModes() ?? []); ?>,
+        <?= json_encode($helper->getConsentModeSettings() ?? []); ?>
+    );
+</script>

@@ -1,0 +1,22 @@
+{
+  "name": "taurus/module-google-consent-mode",
+  "version": "1.0.0",
+  "description": "N/A",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "amasty/gdpr-cookie": "2.10.*",
+    "magepal/magento2-googletagmanager": "2.7.*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Taurus\\GoogleConsentMode\\": ""
+    }
+  }
+}

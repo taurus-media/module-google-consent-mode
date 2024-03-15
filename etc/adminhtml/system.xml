@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2024. Taurus. All rights reserved
+ * @author Alexander Tolochko
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="taurus" translate="label" sortOrder="10">
+            <label>Taurus</label>
+        </tab>
+        <section id="taurus_googleconsentmode" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Google Consent Mode</label>
+            <resource>Taurus_GoogleConsentMode::settings</resource>
+            <tab>taurus</tab>
+            <group id="mapping" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Consent Mode Mapping</label>
+                <field id="map" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Map Consent Mode with Cookie Group</label>
+                    <frontend_model>Taurus\GoogleConsentMode\Block\Adminhtml\Form\Field\Map</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2024. Taurus. All rights reserved
+ * @author Alexander Tolochko
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <taurus_googleconsentmode>
+            <mapping>
+                <map>
+                    <ad_storage>
+                        <consent_name>ad_storage</consent_name>
+                        <default_value>denied</default_value>
+                        <cookie_group_id>2</cookie_group_id>
+                    </ad_storage>
+                    <ad_user_data>
+                        <consent_name>ad_user_data</consent_name>
+                        <default_value>denied</default_value>
+                        <cookie_group_id>2</cookie_group_id>
+                    </ad_user_data>
+                    <ad_personalization>
+                        <consent_name>ad_personalization</consent_name>
+                        <default_value>denied</default_value>
+                        <cookie_group_id>2</cookie_group_id>
+                    </ad_personalization>
+                    <analytics_storage>
+                        <consent_name>analytics_storage</consent_name>
+                        <default_value>denied</default_value>
+                        <cookie_group_id>3</cookie_group_id>
+                    </analytics_storage>
+                </map>
+            </mapping>
+        </taurus_googleconsentmode>
+    </default>
+</config>
