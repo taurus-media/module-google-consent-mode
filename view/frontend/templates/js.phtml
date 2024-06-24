@@ -5,16 +5,20 @@
  */
 
 /** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+/** @var \Taurus\GoogleConsentMode\Helper\Data $helper */
+$helper = $this->helper(\Taurus\GoogleConsentMode\Helper\Data::class);
 
 /** @var \MagePal\GoogleTagManager\Block\DataLayer $dataLayerBlock */
 $dataLayerBlock = $block->getLayout()->getBlock('magepal_gtm_datalayer');
 $dataLayerName = $dataLayerBlock->getDataLayerName();
 
-/** @var \Taurus\GoogleConsentMode\Helper\Data $helper */
-$helper = $this->helper(\Taurus\GoogleConsentMode\Helper\Data::class);
+$defaultConsentModes = \Laminas\Json\Encoder::encode($helper->getDefaultConsentModes() ?? []);
+$consentModeSettings = \Laminas\Json\Encoder::encode($helper->getConsentModeSettings() ?? []);
 ?>
-<script type="text/javascript">
-    window.<?= /* @noEscape */ $dataLayerName ?> = window.<?= /* @noEscape */ $dataLayerName ?> || [];
+<?php $scriptString = <<<script
+    window.{$dataLayerName} = window.{$dataLayerName} || [];
 
     function gtag() {
         window.dataLayer.push(arguments);
@@ -95,7 +99,9 @@ $helper = $this->helper(\Taurus\GoogleConsentMode\Helper\Data::class);
     };
 
     TaurusConsentMode.init(
-        <?= json_encode($helper->getDefaultConsentModes() ?? []); ?>,
-        <?= json_encode($helper->getConsentModeSettings() ?? []); ?>
+        {$getDefaultConsentModes},
+        {$getConsentModeSettings}
     );
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $scriptString, false) ?>
