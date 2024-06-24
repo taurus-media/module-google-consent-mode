@@ -1,6 +1,6 @@
 {
   "name": "taurus/module-google-consent-mode",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "N/A",
   "type": "magento2-module",
   "require": {
