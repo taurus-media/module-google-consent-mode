@@ -9,7 +9,7 @@
     "magepal/magento2-googletagmanager": "*"
   },
   "license": [
-    "Proprietary"
+    "MIT"
   ],
   "autoload": {
     "files": [
